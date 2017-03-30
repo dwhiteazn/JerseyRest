@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -17,26 +18,25 @@ import org.jersey.rest.messenger.model.Message;
 import org.jersey.rest.messenger.service.MessageService;
 
 @Path("/messages")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class MessageResource {
 
 	private MessageService messageService = new MessageService();
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Message> getMessages() {
 		return messageService.getAllMessages();
 	}
 
 	@GET
 	@Path("/{messageId}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Message getMessage(@PathParam("messageId") long messageId) {
 		return messageService.getMessage(messageId);
 	}
 	
 	@GET
 	@Path("/{messageId1}/and/{messageId2}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Message> getMessage(@PathParam("messageId1") long messageId1,
 									@PathParam("messageId2") long messageId2) {
 		List<Message> msgList = new ArrayList<>();
@@ -46,26 +46,21 @@ public class MessageResource {
 	}
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Message addMessage(Message message) {
 		return messageService.addMessage(message);
 	}
 	
 	@PUT
 	@Path("/{messageId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Message updateMessage(@PathParam("messageId") long messageId,
 														 Message message) {
 		message.setId(messageId);
 		return messageService.updateMessage(message);
 	}
 	
-	@PUT
+	@DELETE
 	@Path("/{messageId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void deletMessage(@PathParam("messageId") long messageId) {
+	public void deleteMessage(@PathParam("messageId") long messageId) {
 		messageService.removeMessage(messageId);
 	}
 }
