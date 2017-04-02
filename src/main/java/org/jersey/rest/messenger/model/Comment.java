@@ -1,27 +1,20 @@
 package org.jersey.rest.messenger.model;
 
 import java.util.Date;
-import java.util.Hashtable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-@XmlRootElement
-public class Message {
-
+public class Comment {
 	private long id;
-	private String message;
+	private String comment;
 	private Date date;
 	private String created;
-	private Hashtable<Long, Comment> comments;
 	
-	public Message() {
+	public Comment() {
 		//no-arg constructor for XML/JSON conversion
 	}
 	
-	public Message(long id, String message, String created) {
+	public Comment(long id, String comment, String created) {
 		this.id = id;
-		this.message = message;
+		this.comment = comment;
 		this.date = new Date();
 		this.created = created;
 	}
@@ -35,11 +28,11 @@ public class Message {
 	}
 	
 	public String getMessage() {
-		return message;
+		return comment;
 	}
 	
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessage(String comment) {
+		this.comment = comment;
 	}
 	
 	public Date getDate() {
@@ -57,14 +50,4 @@ public class Message {
 	public void setCreated(String created) {
 		this.created = created;
 	}
-	
-	@XmlTransient
-	public Hashtable<Long, Comment> getComments() {
-		return comments;
-	}
-	
-	public void setComments(Hashtable<Long, Comment> comments) {
-		this.comments = comments;
-	}
-
 }

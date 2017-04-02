@@ -6,6 +6,7 @@ import javax.ws.rs.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jersey.rest.messenger.beans.MessageFilterBean;
 import org.jersey.rest.messenger.model.Message;
 import org.jersey.rest.messenger.service.MessageService;
 
@@ -26,13 +28,14 @@ public class MessageResource {
 	private MessageService messageService = new MessageService();
 
 	@GET
-	public List<Message> getMessages(@QueryParam("year") int year,
-									 @QueryParam("start") int start,
-									 @QueryParam("size") int size) {
+	public List<Message> getMessages(@BeanParam MessageFilterBean filterBean) {
+		int year = filterBean.getYear();
 		if (year > 0) {
 			return messageService.getAllMessagesForYear(year); 
 		}
 		
+		int start = filterBean.getStart();
+		int size = filterBean .getSize();
 		if (start >= 0 && size > 0) {
 			return messageService.getAllMessagesPaginated(start, size);
 		}
@@ -73,5 +76,10 @@ public class MessageResource {
 	@Path("/{messageId}")
 	public void deleteMessage(@PathParam("messageId") long messageId) {
 		messageService.removeMessage(messageId);
+	}
+	
+	@Path("/{messageId}/comments")
+	public CommentResource getCommentResource() {
+		return new CommentResource();
 	}
 }
